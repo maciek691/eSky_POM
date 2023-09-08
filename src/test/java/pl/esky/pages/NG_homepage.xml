@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="E-sky" parallel="tests">
+    <test name="homepage">
+        <classes>
+            <class name = "pl.esky.pages.HomePage.TC01_linksSection"></class>
+            <class name = "pl.esky.pages.HomePage.TC02_newsletter"></class>
+        </classes>
+    </test>
+</suite>

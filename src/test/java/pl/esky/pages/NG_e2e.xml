@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="E-sky" parallel="tests">
+    <test name="E2E">
+        <groups>
+            <run>
+                <include name="E2E"/>
+            </run>
+        </groups>
+        <classes>
+            <class name = "pl.esky.pages.E2E.US01_FlightSearch"></class>
+        </classes>
+    </test>
+</suite>
