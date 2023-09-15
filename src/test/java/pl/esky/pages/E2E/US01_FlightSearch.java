@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pl.esky.Base;
 import pl.esky.pages.SearchingFlightResultPage.SearchingFlightResultPage;
@@ -54,14 +53,14 @@ public class US01_FlightSearch extends Base {
 
         driver.get(prop.getProperty("MainUrl"));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        log.info("browser: " + prop.getProperty("browser"));
+        log.info("browser: " + browser);
         HomePage homePage = new HomePage(driver);
         homePage.acceptCookies();
         log.info("cookies accepted");
         homePage.setOneWayTrip();
         log.info("One way trip ok");
 //        flightSearch.setTripClass(journeyClass);
-        log.info("Class trip ok");
+//        log.info("Class trip ok");
         homePage.setDepartureIfOneWay(departureCity);
         Thread.sleep(1000);
         // to choose Warszawa Chopin airport from the list
@@ -106,6 +105,7 @@ public class US01_FlightSearch extends Base {
     @Test (groups = {"E2E"})
     public void test3() {
         System.out.println("test included to group");
+        log.info("test3 successfully included to group");
     }
 
 

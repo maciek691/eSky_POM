@@ -1,5 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="E-sky" parallel="tests">
+    <listeners>
+        <listener class-name="Listeners"></listener>
+    </listeners>
     <test name="E2E">
         <groups>
             <run>
