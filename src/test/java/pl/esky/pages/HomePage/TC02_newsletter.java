@@ -46,7 +46,7 @@ public class TC02_newsletter extends Base {
             homePage.emailNewsletter.sendKeys(incorrectEmailsList.get(i));
             homePage.signUpForNewsletter();
             Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail");
-            log.info("for incorrect adres e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
+            log.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
         }
     }
 }

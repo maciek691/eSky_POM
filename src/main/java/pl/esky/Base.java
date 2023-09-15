@@ -18,30 +18,36 @@ public class Base {
 
     public WebDriver driver;
     public Properties prop;
+    public static String browser;
+    String browserName;
+
+    public String getBrowserName() throws IOException {
+        prop = new Properties();
+        FileInputStream fis = new FileInputStream("src/main/resources/data.properties");
+        prop.load(fis);
+        browserName = prop.getProperty("browser");
+        return browserName;
+    }
 
     public WebDriver initializeDriver() throws IOException {
-     prop = new Properties();
-     FileInputStream fis = new FileInputStream("src/main/resources/data.properties");
-     prop.load(fis);
-     String browserName = prop.getProperty("browser");
 
-
-
-
-     switch(browserName) {
+     switch(getBrowserName()) {
          case "Chrome":
              System.setProperty("webdriver.chrome.driver", "src/main/resources/Drivers/chromedriver");
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new ChromeDriver();
+             browser = "Chrome";
              break;
          case "FireFox":
              System.setProperty("webdriver.gecko.driver", "src/main/resources/Drivers/geckodriver");
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new FirefoxDriver();
+             browser = "FireFox";
              break;
          case "Safari":
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new SafariDriver();
+             browser = "Safari";
              break;
 //         case "Opera":
 //             System.setProperty("webdriver.opera.driver", "src/main/java/pl/esky/pages/Resources/Drivers/operadriver");
@@ -51,6 +57,7 @@ public class Base {
              System.setProperty("webdriver.edge.driver", "src/main/resources/Drivers/msedgedriver");
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new EdgeDriver();
+             browser = "Edge";
              break;
          default:
              System.out.println("please check 'browser' property");
