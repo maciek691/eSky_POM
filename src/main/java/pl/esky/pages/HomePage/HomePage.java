@@ -8,9 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import pl.esky.Base;
-
-
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

@@ -9,13 +9,13 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
+import org.testng.asserts.SoftAssert;
 import pl.esky.Base;
 import pl.esky.pages.SearchingFlightResultPage.SearchingFlightResultPage;
 import pl.esky.pages.HomePage.HomePage;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class US01_FlightSearch extends Base {
@@ -25,14 +25,11 @@ public class US01_FlightSearch extends Base {
 
     WebDriver driver;
     private static Logger log = LogManager.getLogger(US01_FlightSearch.class);
-    public Properties prop = new Properties();
 
     @BeforeTest (groups = {"E2E"})
     public void setup() throws IOException {
         driver = initializeDriver();
-
-        FileInputStream fis = new FileInputStream("src/main/resources/data.properties");
-        prop.load(fis);
+        log.info("browser: " + browser);
     }
 
     @AfterTest (groups = {"E2E"})
@@ -42,6 +39,8 @@ public class US01_FlightSearch extends Base {
 
     @Test (groups = {"E2E"})
     public void searchFlight() throws InterruptedException, IOException {
+        SoftAssert softAssert = new SoftAssert();
+
         //testing data
         String journeyClass = "business";
         String departureCity = "Warszawa";
@@ -53,7 +52,6 @@ public class US01_FlightSearch extends Base {
 
         driver.get(prop.getProperty("MainUrl"));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        log.info("browser: " + browser);
         HomePage homePage = new HomePage(driver);
         homePage.acceptCookies();
         log.info("cookies accepted");
@@ -87,25 +85,36 @@ public class US01_FlightSearch extends Base {
 
         SearchingFlightResultPage searchingFlightResultPage = new SearchingFlightResultPage(driver);
         Thread.sleep(3000);
-        Assert.assertEquals(searchingFlightResultPage.getTitle(), "Warszawa (PL) → Kraków (PL) - Wyniki wyszukiwania");
-        Assert.assertEquals(searchingFlightResultPage.isOffersListDisplayed(), true);
+        softAssert.assertEquals(searchingFlightResultPage.getTitle(), "Warszawa (PL) → Kraków (PL) - Wyniki wyszukiwania", "Title mismatch");
+        softAssert.assertTrue(searchingFlightResultPage.isOffersListDisplayed(),  "Offers list is not displayed");
+        try {
+            softAssert.assertAll();
+        }
+        catch (AssertionError e) {
+            log.error("Assertion error: " + e.getMessage());
+        }
+        finally {
+            softAssert.assertAll();
+        }
         log.info("Landing Page ok");
     }
 
     @Test
     public void test() {
         System.out.println("test excluded from group");
+        log.info("test1 excluded to group");
     }
 
     @Test
     public void test2() {
         System.out.println("test excluded from group");
+        log.info("test2 excluded to group");
     }
 
     @Test (groups = {"E2E"})
     public void test3() {
         System.out.println("test included to group");
-        log.info("test3 successfully included to group");
+        log.info("test3 included to group");
     }
 
 

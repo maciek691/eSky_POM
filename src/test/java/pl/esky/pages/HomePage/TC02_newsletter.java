@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 import pl.esky.Base;
 import pl.esky.other.FileInput;
 
@@ -45,7 +46,13 @@ public class TC02_newsletter extends Base {
             homePage.emailNewsletter.clear();
             homePage.emailNewsletter.sendKeys(incorrectEmailsList.get(i));
             homePage.signUpForNewsletter();
-            Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail");
+            //INFO: to catch error message in case if sth go wrong other than error message.
+            try {
+                Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail", "Error message is not appearing");
+            } catch (Exception e) {
+                log.error("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
+                Assert.fail("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
+            }
             log.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
         }
     }

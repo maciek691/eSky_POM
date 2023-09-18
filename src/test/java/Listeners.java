@@ -43,11 +43,11 @@ public class Listeners extends Base implements ITestListener {
             e.printStackTrace();
         }
 
-        try {
-            extentTest.get().addScreenCaptureFromPath(getScreenShotPath(testMethodName, driver), iTestResult.getMethod().getMethodName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            extentTest.get().addScreenCaptureFromPath(getScreenShotPath(testMethodName, driver), iTestResult.getMethod().getMethodName());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

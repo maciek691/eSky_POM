@@ -12,7 +12,7 @@ public class ExtentReporterNG {
     static ExtentReports extent;
 
     public static ExtentReports getReportObject() {
-        SimpleDateFormat reportNameDateFormat = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+        SimpleDateFormat reportNameDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date reportDate = new Date();
         String reportPath = System.getProperty("user.dir")+"/reports/report "+reportNameDateFormat.format(reportDate) +".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(reportPath);
