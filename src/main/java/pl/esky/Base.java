@@ -1,5 +1,6 @@
 package pl.esky;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -37,13 +38,13 @@ public class Base {
 
      switch(getBrowserName()) {
          case "Chrome":
-             System.setProperty("webdriver.chrome.driver", "src/main/resources/Drivers/chromedriver");
+             WebDriverManager.chromedriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new ChromeDriver();
              browser = "Chrome";
              break;
          case "FireFox":
-             System.setProperty("webdriver.gecko.driver", "src/main/resources/Drivers/geckodriver");
+             WebDriverManager.firefoxdriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new FirefoxDriver();
              browser = "FireFox";
@@ -58,7 +59,7 @@ public class Base {
 //             driver = new OperaDriver();
 //             break;
          case "Edge":
-             System.setProperty("webdriver.edge.driver", "src/main/resources/Drivers/msedgedriver");
+             WebDriverManager.edgedriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new EdgeDriver();
              browser = "Edge";
