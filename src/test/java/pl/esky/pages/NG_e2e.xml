@@ -1,16 +1,19 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="E-sky" parallel="tests">
     <listeners>
-        <listener class-name="Listeners"></listener>
+        <listener class-name="Listeners"/>
     </listeners>
     <test name="E2E">
+        <parameter name="parameter1" value="parameter1 works! "></parameter>
+        <parameter name="parameter2" value="parameter2 works! "></parameter>
+        <parameter name="parameter3" value="parameter3 works! "></parameter>
         <groups>
             <run>
                 <include name="E2E"/>
             </run>
         </groups>
         <classes>
-            <class name = "pl.esky.pages.E2E.US01_FlightSearch"></class>
+            <class name = "pl.esky.pages.E2E.US01_FlightSearch"/>
         </classes>
     </test>
 </suite>

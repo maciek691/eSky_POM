@@ -5,8 +5,7 @@
     </listeners>
     <test name="homepage">
         <classes>
-            <class name = "pl.esky.pages.HomePage.TC01_linksSection"/>
-            <class name = "pl.esky.pages.HomePage.TC02_newsletter"/>
+            <class name = "pl.esky.pages.HomePage.playground"/>
         </classes>
     </test>
 </suite>

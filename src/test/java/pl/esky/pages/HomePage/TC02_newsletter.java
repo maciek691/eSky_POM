@@ -7,11 +7,11 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import pl.esky.Base;
 import pl.esky.other.FileInput;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +35,8 @@ public class TC02_newsletter extends Base {
     }
 
     @Test
-     public void checkNewsletterWithIncorrectEmail() throws IOException {
+     public void checkNewsletterWithIncorrectEmail(Method method) throws IOException {
+
         FileInput d = new FileInput();
         ArrayList<String> incorrectEmailsList = d.getData("IncorrectEmails");
         log.info("Array list created from the file");
@@ -51,6 +52,7 @@ public class TC02_newsletter extends Base {
                 Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail", "Error message is not appearing");
             } catch (Exception e) {
                 log.error("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
+                getScreenShotPath(method.getName(), driver);
                 Assert.fail("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
             }
             log.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
