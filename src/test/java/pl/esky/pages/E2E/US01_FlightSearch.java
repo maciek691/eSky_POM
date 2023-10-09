@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import org.testng.asserts.SoftAssert;
@@ -99,13 +100,16 @@ public class US01_FlightSearch extends Base {
         log.info("Landing Page ok");
     }
 
-    @Test
+    //additional timeout pof this specific test
+    @Test (timeOut = 4000)
     public void test() {
         System.out.println("test excluded from group");
         log.info("test1 excluded to group");
     }
-
-    @Test
+    /** enabled = false wyłącza całkowicie dany test,
+     * skipFailedInvocations = false dotyczy testów parametrycznych i kontroluje,
+     * czy TestNG powinien kontynuować wykonywanie zestawów danych po napotkaniu niepowodzenia w jednym z nich. */
+    @Test (enabled = false, skipFailedInvocations = false)
     public void test2() {
         System.out.println("test excluded from group");
         log.info("test2 excluded to group");
@@ -116,6 +120,20 @@ public class US01_FlightSearch extends Base {
         System.out.println("test included to group");
         log.info("test3 included to group");
     }
+    @Test(groups = {"E2E"})
+    @Parameters ({"parameter1", "parameter2", "parameter3"})
+        public void test4(String param1, String param2, String param3) {
+        System.out.println(param1);
+        log.info(param1);
+        System.out.println(param2);
+        log.info(param2);
+        System.out.println(param3);
+        log.info(param3);
+    }
 
-
+    @Test (timeOut = 4000)
+    public void test5() {
+        System.out.println("test excluded from group");
+        log.info("test1 excluded to group");
+    }
 }

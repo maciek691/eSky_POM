@@ -12,6 +12,8 @@ import org.openqa.selenium.safari.SafariDriver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 public class Base {
@@ -20,6 +22,8 @@ public class Base {
     public Properties prop;
     public static String browser;
     String browserName;
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     public String getBrowserName() throws IOException {
         prop = new Properties();
@@ -65,12 +69,11 @@ public class Base {
         return driver;
     }
 
-//    public String getScreenShotPath(String testCaseName, WebDriver driver) throws IOException {
-//        TakesScreenshot ts = (TakesScreenshot) driver;
-//        File source = ts.getScreenshotAs(OutputType.FILE);
-//        String destinationFile = System.getProperty("user.dir")+"/reports/"+testCaseName+".png";
-//        FileUtils.copyFile(source, new File(destinationFile));
-//        return destinationFile;
-//    }
-
+    public String getScreenShotPath(String testCaseName, WebDriver driver) throws IOException {
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        String destinationFile = "screenshots/" + testCaseName + " " + dateFormat.format(date) + ".png";
+        FileUtils.copyFile(source, new File(destinationFile));
+        return destinationFile;
+    }
 }
