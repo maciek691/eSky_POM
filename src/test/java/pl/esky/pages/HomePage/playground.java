@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.*;
 
-public class playground extends Base {
+public class  playground extends Base {
 
     private static Logger log = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;

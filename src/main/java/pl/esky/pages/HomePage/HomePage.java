@@ -14,8 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static pl.esky.Base.browser;
+import static pl.esky.Base.isLinkBroken;
 
 
 public class HomePage {
@@ -110,15 +112,19 @@ public class HomePage {
     }
 
     public void setDay(String lookingDay) {
-        int numberOfDays = driver.findElements(By.cssSelector("td[data-handler='selectDay']")).size();
+        List<WebElement> days = driver.findElements(By.cssSelector("td[data-handler='selectDay']"));
+            days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
 
-        for (int i = 0; i < numberOfDays; i++) {
-            String day = driver.findElements(By.className("ui-state-default")).get(i).getText();
-            if (day.equalsIgnoreCase(lookingDay)) {
-                driver.findElements(By.className("ui-state-default")).get(i).click();
-                break;
-            }
-        }
+
+//        int numberOfDays = driver.findElements(By.cssSelector("td[data-handler='selectDay']")).size();
+//
+//        for (int i = 0; i < numberOfDays; i++) {
+//            String day = driver.findElements(By.className("ui-state-default")).get(i).getText();
+//            if (day.equalsIgnoreCase(lookingDay)) {
+//                driver.findElements(By.className("ui-state-default")).get(i).click();
+//                break;
+//            }
+//        }
     }
 
     public void setAdultPassengers(String numberOfAdultPassengers) {
@@ -137,35 +143,51 @@ public class HomePage {
         searchButton.click();
     }
 
-    public void checkLinksInLinksSection(String xpathListLokator) throws IOException {
-        SoftAssert softAssert = new SoftAssert();
+//    public void checkLinksInLinksSection(String xpathListLokator) throws IOException {
+//        SoftAssert softAssert = new SoftAssert();
+//
+//        List<WebElement> links = driver.findElements(By.xpath(xpathListLokator));
+//        String prywatnoscLink = "Prywatność"; // as only this link use js.
+//
+//        for (WebElement link : links) {
+//            try {
+//                String url = link.getAttribute("href");
+//                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+//                connection.setRequestMethod("HEAD");
+//                connection.connect();
+//                int respondCode = connection.getResponseCode();
+//
+//                if (respondCode < 400) {
+//                    log.info("the link " + link.getText() + " is ok");
+//                } else {
+//                    log.error("the link " + link.getText() + " is broke with code " + respondCode);
+//                }
+//
+//                softAssert.assertTrue(respondCode < 400, "The link with text " + link.getText() + " is broke with code "
+//                        + respondCode);
+//
+//            } catch (MalformedURLException e) {
+//                Assert.assertEquals(prywatnoscLink, link.getText());
+//                log.warn("The link with text " + link.getText() + " throw Exception " + e.getMessage());
+//                    System.out.println("The link with text " + link.getText() + " throw Exception " + e.getMessage());
+//            }
+//        }
+//        softAssert.assertAll();
+//    }
 
+    public void checkLinksInLinksSection (String xpathListLokator) {
+        // Create list of the links
         List<WebElement> links = driver.findElements(By.xpath(xpathListLokator));
-        String prywatnoscLink = "Prywatność"; // as only this link use js.
-        for (WebElement link : links) {
-            try {
-                String url = link.getAttribute("href");
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                connection.setRequestMethod("HEAD");
-                connection.connect();
-                int respondCode = connection.getResponseCode();
-
-                if (respondCode < 400) {
-                    log.info("the link " + link.getText() + " is ok");
-                } else {
-                    log.error("the link " + link.getText() + " is broke with code " + respondCode);
-                }
-
-                softAssert.assertTrue(respondCode < 400, "The link with text " + link.getText() + " is broke with code "
-                        + respondCode);
-
-            } catch (MalformedURLException e) {
-                Assert.assertEquals(prywatnoscLink, link.getText());
-                log.warn("The link with text " + link.getText() + " throw Exception " + e.getMessage());
-                System.out.println("The link with text " + link.getText() + " throw Exception " + e.getMessage());
-            }
+        //check if the links are not broken
+        List<WebElement> brokenLinks = links.stream()
+                .filter(link -> isLinkBroken(link))
+                .collect(Collectors.toList());
+        //log the broken links
+        log.warn("There are " + brokenLinks.size() + " broken links");
+        for (WebElement brokenLink : brokenLinks) {
+            log.error("the link " + brokenLink.getText() + " is broke");
         }
-        softAssert.assertAll();
+        Assert.assertTrue(brokenLinks.isEmpty(), "There are " + brokenLinks.size() + " broken links");
     }
 
     public void signUpForNewsletter() {
