@@ -5,14 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +27,6 @@ public class HomePage {
     // Locators
     @FindBy(id = "usercentrics-root")
     WebElement domShadow;
-    @FindBy(css = "button[data-testid='uc-accept-all-button']")
-    WebElement acceptCookiesButton;
     @FindBy(id = "TripTypeOneway")
     WebElement tripOneWayRadiobutton;
     @FindBy(id = "serviceClass")
@@ -63,6 +60,9 @@ public class HomePage {
     @FindBy(css = "em[class='error-msg']")
     WebElement newsletterErrorMessage;
 
+    public By calendar = By.cssSelector("td[data-handler='selectDay']");
+    public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
+    public By acceptCookiesButton = By.cssSelector("button[data-testid='uc-accept-all-button']");
 
     // Constructor
     public HomePage(final WebDriver driver) throws IOException {
@@ -73,17 +73,19 @@ public class HomePage {
     // Actions
 
     public void acceptCookies() throws IOException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         if (browser == "Chrome" || browser == "Edge") {
             WebElement shadowHost = domShadow;
             SearchContext shadowRoot = shadowHost.getShadowRoot();
-            shadowRoot.findElement(By.cssSelector("button[data-testid='uc-accept-all-button']")).click();
+            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
+            shadowRoot.findElement(acceptCookiesButton).click();
         } else {
             WebElement shadowHost = domShadow;
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            List<?> elements = (List<?>) js.executeScript(
-                    "return arguments[0].shadowRoot.children", shadowHost);
+            List<?> elements = (List<?>) js.executeScript("return arguments[0].shadowRoot.children", shadowHost);
             WebElement shadowRoot = (WebElement) elements.get(0);
-            shadowRoot.findElement(By.cssSelector("button[data-testid='uc-accept-all-button']")).click();
+            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
+            shadowRoot.findElement(acceptCookiesButton).click();
         }
     }
 
@@ -111,9 +113,9 @@ public class HomePage {
         }
     }
 
-    public void setDay(String lookingDay) {
-        List<WebElement> days = driver.findElements(By.cssSelector("td[data-handler='selectDay']"));
-            days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
+    public void setDay(By calendar, String lookingDay) {
+        List<WebElement> days = driver.findElements(calendar);
+        days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
 
 
 //        int numberOfDays = driver.findElements(By.cssSelector("td[data-handler='selectDay']")).size();
@@ -175,13 +177,11 @@ public class HomePage {
 //        softAssert.assertAll();
 //    }
 
-    public void checkLinksInLinksSection (String xpathListLokator) {
+    public void checkLinksInLinksSection(By xpathListLokator) {
         // Create list of the links
-        List<WebElement> links = driver.findElements(By.xpath(xpathListLokator));
+        List<WebElement> links = driver.findElements(xpathListLokator);
         //check if the links are not broken
-        List<WebElement> brokenLinks = links.stream()
-                .filter(link -> isLinkBroken(link))
-                .collect(Collectors.toList());
+        List<WebElement> brokenLinks = links.stream().filter(link -> isLinkBroken(link)).collect(Collectors.toList());
         //log the broken links
         log.warn("There are " + brokenLinks.size() + " broken links");
         for (WebElement brokenLink : brokenLinks) {

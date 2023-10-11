@@ -17,10 +17,10 @@ import java.time.Duration;
 
 public class TC01_linksSection extends Base {
 
-    private static Logger log = LogManager.getLogger(TC01_linksSection.class);
+    private static final Logger log = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;
 
-    String xpathToLinksInLinksSection = "//div[contains(@class,'col')]/ul/li/a";
+
 
     @BeforeTest
     public void setup() throws IOException {
@@ -42,6 +42,6 @@ public class TC01_linksSection extends Base {
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 //        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("usercentrics-root")));
         homePage.acceptCookies();
-        homePage.checkLinksInLinksSection(xpathToLinksInLinksSection);
+        homePage.checkLinksInLinksSection(homePage.xpathToLinksInLinksSection);
     }
 }

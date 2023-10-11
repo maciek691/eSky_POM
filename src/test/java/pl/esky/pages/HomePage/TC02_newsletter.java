@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TC02_newsletter extends Base {
 
-    private static Logger log = LogManager.getLogger(TC02_newsletter.class);
+    private static final Logger log = LogManager.getLogger(TC02_newsletter.class);
     WebDriver driver;
 
     @BeforeTest

@@ -25,7 +25,7 @@ public class US01_FlightSearch extends Base {
         from Warsaw Chopin Airport to Cracow Balice Airport  */
 
     WebDriver driver;
-    private static Logger log = LogManager.getLogger(US01_FlightSearch.class);
+    private static final Logger log = LogManager.getLogger(US01_FlightSearch.class);
 
     @BeforeTest (groups = {"E2E"})
     public void setup() throws IOException {
@@ -50,6 +50,7 @@ public class US01_FlightSearch extends Base {
         String lookingDay = "10";
         String numberOfAdultPassengers = "2";
         String numberOfChildPassengers = "2";
+
 
         driver.get(prop.getProperty("MainUrl"));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -76,7 +77,7 @@ public class US01_FlightSearch extends Base {
 
         homePage.setMonth(lookingMonth);
         log.info("Month set");
-        homePage.setDay(lookingDay);
+        homePage.setDay(homePage.calendar, lookingDay);
         log.info("Day set");
         homePage.setAdultPassengers(numberOfAdultPassengers);
         log.info("Adult passengers set");

@@ -52,7 +52,7 @@ public class FileInput {
                     if (r.getCell(column) != null) {
                         if (r.getCell(column).getStringCellValue().equalsIgnoreCase(testCaseName)) {
                             Iterator<Cell> cv = r.cellIterator();
-                            while (cv.hasNext() == true ) {
+                            while (cv.hasNext()) {
                                 Cell c = cv.next();
                                 if (c.getCellType() == CellType.STRING) {
                                     data.add(c.getStringCellValue());

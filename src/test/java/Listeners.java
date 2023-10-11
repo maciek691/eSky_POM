@@ -29,26 +29,26 @@ public class Listeners extends Base implements ITestListener {
         extentTest.get().log(Status.PASS,"Test Passed");
     }
 
-    @Override
-    public void onTestFailure(ITestResult iTestResult) {
-        extentTest.get().fail(iTestResult.getThrowable());
-        WebDriver driver = null;
-        String testMethodName = iTestResult.getMethod().getMethodName();
-
-        try {
-            driver = (WebDriver)iTestResult.getTestClass().getRealClass().getDeclaredField("driver").get(iTestResult.getInstance());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+//    @Override
+//    public void onTestFailure(ITestResult iTestResult) {
+//        extentTest.get().fail(iTestResult.getThrowable());
+//        WebDriver driver = null;
+//        String testMethodName = iTestResult.getMethod().getMethodName();
+//
+//        try {
+//            driver = (WebDriver)iTestResult.getTestClass().getRealClass().getDeclaredField("driver").get(iTestResult.getInstance());
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
 
 //        try {
 //            extentTest.get().addScreenCaptureFromPath(getScreenShotPath(testMethodName, driver), iTestResult.getMethod().getMethodName());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-    }
+//    }
 
     @Override
     public void onFinish(ITestContext iTestContext) {

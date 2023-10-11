@@ -31,7 +31,7 @@ public class Base {
     String browserName;
     Date date = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    private static Logger log = LogManager.getLogger(Base.class);
+    private static final Logger log = LogManager.getLogger(Base.class);
 
     public String getBrowserName() throws IOException {
         prop = new Properties();
@@ -57,6 +57,7 @@ public class Base {
              browser = "FireFox";
              break;
          case "Safari":
+//             WebDriverManager.safaridriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new SafariDriver();
              browser = "Safari";
