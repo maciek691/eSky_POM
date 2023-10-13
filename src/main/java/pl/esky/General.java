@@ -9,6 +9,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,10 +19,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Properties;
 
-public class Base {
+public class General {
 
     public WebDriver driver;
 
@@ -28,7 +32,7 @@ public class Base {
     String browserName;
     Date date = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    private static final Logger LOG = LogManager.getLogger(Base.class);
+    private static final Logger LOG = LogManager.getLogger(General.class);
 
     public String getBrowserName() throws IOException {
         prop = new Properties();
@@ -105,6 +109,16 @@ public class Base {
             LOG.error("The link with text " + link.getText() + " throw Exception " + e.getMessage());
             return true;
         }
+    }
+
+    public void waitForElement (WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated((By) webElement));
+    }
+
+    public String getTitleOfThePage() {
+        String pageTitle = driver.getTitle();
+        return pageTitle;
     }
 
 }

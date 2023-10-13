@@ -1,16 +1,13 @@
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import pl.esky.Base;
+import pl.esky.General;
 import pl.esky.other.ExtentReporterNG;
 
-import java.io.IOException;
-
-public class Listeners extends Base implements ITestListener {
+public class Listeners extends General implements ITestListener {
 
     ExtentTest test;
     ExtentReports extent = ExtentReporterNG.getReportObject();

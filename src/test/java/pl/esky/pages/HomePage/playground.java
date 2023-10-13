@@ -10,7 +10,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import pl.esky.Base;
+import pl.esky.General;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.*;
 
-public class  playground extends Base {
+public class  playground extends General {
 
     private static final Logger log = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;

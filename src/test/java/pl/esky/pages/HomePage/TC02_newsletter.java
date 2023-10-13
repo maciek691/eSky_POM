@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import pl.esky.Base;
+import pl.esky.General;
 import pl.esky.other.FileInput;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class TC02_newsletter extends Base {
+public class TC02_newsletter extends General {
 
     private static final Logger LOG = LogManager.getLogger(TC02_newsletter.class);
     WebDriver driver;

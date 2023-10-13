@@ -6,12 +6,12 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import pl.esky.Base;
+import pl.esky.General;
 
 import java.io.IOException;
 import java.time.Duration;
 
-public class TC01_linksSection extends Base {
+public class TC01_linksSection extends General {
 
     private static final Logger LOG = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;
@@ -31,12 +31,9 @@ public class TC01_linksSection extends Base {
     }
 
     @Test
-    public void checkLinksInLinksSection() throws IOException, InterruptedException {
+    public void checkLinksInSectionLinks() throws IOException, InterruptedException {
         HomePage homePage = new HomePage(driver);
         driver.get(prop.getProperty("MainUrl"));
-//        Thread.sleep(5000);
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("usercentrics-root")));
         homePage.acceptCookies();
         homePage.checkLinksInLinksSection(homePage.xpathToLinksInLinksSection);
     }
