@@ -21,9 +21,18 @@ import static pl.esky.Base.isLinkBroken;
 
 public class HomePage {
 
-    private static final Logger log = LogManager.getLogger(HomePage.class);
+
+    // Constructor
+    private WebDriver driver;
+    public HomePage(final WebDriver driver) throws IOException {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
     // Variables
-    private final WebDriver driver;
+    private static final Logger LOG = LogManager.getLogger(HomePage.class);
+
+//    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
     // Locators
     @FindBy(id = "usercentrics-root")
     WebElement domShadow;
@@ -60,15 +69,11 @@ public class HomePage {
     @FindBy(css = "em[class='error-msg']")
     WebElement newsletterErrorMessage;
 
-    public By calendar = By.cssSelector("td[data-handler='selectDay']");
+    @FindBy(css = "td[data-handler='selectDay']")
+    List <WebElement> calendar;
     public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
     public By acceptCookiesButton = By.cssSelector("button[data-testid='uc-accept-all-button']");
 
-    // Constructor
-    public HomePage(final WebDriver driver) throws IOException {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
 
     // Actions
 
@@ -98,6 +103,21 @@ public class HomePage {
         journey.selectByValue(journeyClass);
     }
 
+//    public void setDepartureIfOneWay(String departureCity) throws InterruptedException {
+//        Actions a = new Actions(driver);
+//        a.sendKeys(departureIfOneWay, departureCity).build().perform();
+//        Thread.sleep(3000);
+////        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("autocomplete-holder")));
+//        driver.findElement(By.cssSelector("a[data-city-code='waw']")).click();
+//    }
+//
+//    public void setArrivalCity(String arrivalCity) throws InterruptedException {
+//        Actions a = new Actions(driver);
+//        a.sendKeys(arrivalIfOneWay, arrivalCity).build().perform();
+//        Thread.sleep(3000);
+////        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("autocomplete-holder")));
+//        driver.findElement(By.cssSelector("a[data-city-code='KRK']")).click();
+//    }
     public void setDepartureIfOneWay(String departureCity) {
         departureIfOneWay.sendKeys(departureCity);
     }
@@ -113,8 +133,8 @@ public class HomePage {
         }
     }
 
-    public void setDay(By calendar, String lookingDay) {
-        List<WebElement> days = driver.findElements(calendar);
+    public void setDay(String lookingDay) {
+        List<WebElement> days = calendar;
         days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
 
 
@@ -183,9 +203,9 @@ public class HomePage {
         //check if the links are not broken
         List<WebElement> brokenLinks = links.stream().filter(link -> isLinkBroken(link)).collect(Collectors.toList());
         //log the broken links
-        log.warn("There are " + brokenLinks.size() + " broken links");
+        LOG.warn("There are " + brokenLinks.size() + " broken links");
         for (WebElement brokenLink : brokenLinks) {
-            log.error("the link " + brokenLink.getText() + " is broke");
+            LOG.error("the link " + brokenLink.getText() + " is broke");
         }
         Assert.assertTrue(brokenLinks.isEmpty(), "There are " + brokenLinks.size() + " broken links");
     }

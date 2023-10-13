@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TC02_newsletter extends Base {
 
-    private static final Logger log = LogManager.getLogger(TC02_newsletter.class);
+    private static final Logger LOG = LogManager.getLogger(TC02_newsletter.class);
     WebDriver driver;
 
     @BeforeTest
@@ -25,7 +25,7 @@ public class TC02_newsletter extends Base {
         driver = initializeDriver();
         driver.get(prop.getProperty("MainUrl"));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        log.info("browser: " + prop.getProperty("browser"));
+        LOG.info("browser: " + prop.getProperty("browser"));
     }
 
 
@@ -39,7 +39,7 @@ public class TC02_newsletter extends Base {
 
         FileInput d = new FileInput();
         ArrayList<String> incorrectEmailsList = d.getData("IncorrectEmails");
-        log.info("Array list created from the file");
+        LOG.info("Array list created from the file");
 
         HomePage homePage = new HomePage(driver);
         homePage.acceptCookies();
@@ -51,11 +51,11 @@ public class TC02_newsletter extends Base {
             try {
                 Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail", "Error message is not appearing");
             } catch (Exception e) {
-                log.error("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
+                LOG.error("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
                 getScreenShotPath(method.getName(), driver);
                 Assert.fail("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
             }
-            log.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
+            LOG.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
         }
     }
 }

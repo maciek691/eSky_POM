@@ -61,6 +61,15 @@ public class US01_FlightSearch extends Base {
         log.info("One way trip ok");
 //        flightSearch.setTripClass(journeyClass);
 //        log.info("Class trip ok");
+//        homePage.setDepartureIfOneWay(departureCity);
+////        Thread.sleep(1000);
+//        log.info("Departure City set");
+//
+//        homePage.setArrivalCity(arrivalCity);
+////        Thread.sleep(1000);
+////        driver.findElement(By.id("arrivalOneway")).sendKeys(Keys.ENTER);
+//        log.info("Arrival City set");
+
         homePage.setDepartureIfOneWay(departureCity);
         Thread.sleep(1000);
         // to choose Warszawa Chopin airport from the list
@@ -77,7 +86,7 @@ public class US01_FlightSearch extends Base {
 
         homePage.setMonth(lookingMonth);
         log.info("Month set");
-        homePage.setDay(homePage.calendar, lookingDay);
+        homePage.setDay(lookingDay);
         log.info("Day set");
         homePage.setAdultPassengers(numberOfAdultPassengers);
         log.info("Adult passengers set");

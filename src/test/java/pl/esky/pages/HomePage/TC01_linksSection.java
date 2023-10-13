@@ -2,11 +2,7 @@ package pl.esky.pages.HomePage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -17,7 +13,7 @@ import java.time.Duration;
 
 public class TC01_linksSection extends Base {
 
-    private static final Logger log = LogManager.getLogger(TC01_linksSection.class);
+    private static final Logger LOG = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;
 
 
@@ -26,7 +22,7 @@ public class TC01_linksSection extends Base {
     public void setup() throws IOException {
         driver = initializeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
-        log.info("browser: " + prop.getProperty("browser"));
+        LOG.info("browser: " + prop.getProperty("browser"));
     }
 
     @AfterTest
