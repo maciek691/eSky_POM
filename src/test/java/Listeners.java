@@ -6,8 +6,9 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 import pl.esky.General;
 import pl.esky.other.ExtentReporterNG;
+import pl.esky.pages.TestComponents.BaseTest;
 
-public class Listeners extends General implements ITestListener {
+public class Listeners extends BaseTest implements ITestListener {
 
     ExtentTest test;
     ExtentReports extent = ExtentReporterNG.getReportObject();
