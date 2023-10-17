@@ -3,14 +3,13 @@ package pl.esky.pages.HomePage;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WindowType;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pl.esky.General;
+import pl.esky.pages.TestComponents.BaseTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +17,9 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.*;
 
-public class  playground extends General {
+public class  playground extends BaseTest {
 
-    private static final Logger log = LogManager.getLogger(TC01_linksSection.class);
+    private static final Logger log = LogManager.getLogger(playground.class);
     WebDriver driver;
 
     String xpathToLinksInLinksSection = "//div[contains(@class,'col')]/ul/li/a";
@@ -37,11 +36,47 @@ public class  playground extends General {
         driver.quit();
     }
 
+    //additional timeout pof this specific test
+    @Test (timeOut = 4000)
+    public void test() {
+        System.out.println("test excluded from group");
+        log.info("test1 excluded to group");
+    }
+    /** enabled = false wyłącza całkowicie dany test,
+     * skipFailedInvocations = false dotyczy testów parametrycznych i kontroluje,
+     * czy TestNG powinien kontynuować wykonywanie zestawów danych po napotkaniu niepowodzenia w jednym z nich. */
+    @Test (enabled = false, skipFailedInvocations = false)
+    public void test2() {
+        System.out.println("test excluded from group");
+        log.info("test2 excluded from group");
+    }
+
+    @Test (groups = {"includeGroup"})
+    public void test3() {
+        System.out.println("test included to group");
+        log.info("test3 included to group");
+    }
+    @Test(groups = {"includeGroup"})
+    @Parameters({"parameter1", "parameter2", "parameter3"})
+    public void test4(String param1, String param2, String param3) {
+        System.out.println(param1);
+        log.info(param1);
+        System.out.println(param2);
+        log.info(param2);
+        System.out.println(param3);
+        log.info(param3);
+    }
+
+    @Test (timeOut = 4000)
+    public void test5() {
+        System.out.println("test excluded from group");
+        log.info("test1 excluded to group");
+    }
     @Test(skipFailedInvocations = true)
     public void tekeScreenshot(Method method) throws IOException {
         driver.get(prop.getProperty("MainUrl"));
         HomePage hp = new HomePage(driver);
-        hp.acceptCookies();
+        BaseTest.acceptCookies(By.id("usercentrics-root"));
         //otwarcie nowej zakładki
         driver.switchTo().newWindow(WindowType.TAB);
         //utworzenie listy zakładek otwartych
