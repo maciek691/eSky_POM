@@ -16,17 +16,13 @@ public class SearchingFlightResultPage {
         PageFactory.initElements(driver,this);
     }
 
+    public String searchResultPageTitle = "Warszawa (PL) → Kraków (PL) - Wyniki wyszukiwania";
     // Locators
     @FindBy(css = "ul[class='offers']")
     WebElement offersList;
 
 
     //Actions
-
-    public String getTitle () {
-        String title = driver.getTitle();
-        return title;
-    }
 
     public boolean isOffersListDisplayed() {
     	return offersList.isDisplayed();

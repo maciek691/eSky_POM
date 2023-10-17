@@ -5,27 +5,25 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 import org.testng.asserts.SoftAssert;
-import pl.esky.Base;
+import pl.esky.General;
 import pl.esky.pages.SearchingFlightResultPage.SearchingFlightResultPage;
 import pl.esky.pages.HomePage.HomePage;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class US01_FlightSearch extends Base {
+public class US01_FlightSearch extends General {
         /* As a Client
         I want to find a flight for me and my family
         from Warsaw Chopin Airport to Cracow Balice Airport  */
 
     WebDriver driver;
-    private static Logger log = LogManager.getLogger(US01_FlightSearch.class);
+    private static final Logger log = LogManager.getLogger(US01_FlightSearch.class);
 
     @BeforeTest (groups = {"E2E"})
     public void setup() throws IOException {
@@ -51,6 +49,10 @@ public class US01_FlightSearch extends Base {
         String numberOfAdultPassengers = "2";
         String numberOfChildPassengers = "2";
 
+        By oneWayArrivalCity = By.id("arrivalOneway");
+        By oneWayDepartureCity = By.id("departureOneway");
+
+
         driver.get(prop.getProperty("MainUrl"));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         HomePage homePage = new HomePage(driver);
@@ -60,18 +62,27 @@ public class US01_FlightSearch extends Base {
         log.info("One way trip ok");
 //        flightSearch.setTripClass(journeyClass);
 //        log.info("Class trip ok");
+//        homePage.setDepartureIfOneWay(departureCity);
+////        Thread.sleep(1000);
+//        log.info("Departure City set");
+//
+//        homePage.setArrivalCity(arrivalCity);
+////        Thread.sleep(1000);
+////        driver.findElement(By.id("arrivalOneway")).sendKeys(Keys.ENTER);
+//        log.info("Arrival City set");
+
         homePage.setDepartureIfOneWay(departureCity);
         Thread.sleep(1000);
         // to choose Warszawa Chopin airport from the list
         for (int i = 0; i < 2; i++) {
-            driver.findElement(By.id("departureOneway")).sendKeys(Keys.ARROW_DOWN);
+            driver.findElement(oneWayDepartureCity).sendKeys(Keys.ARROW_DOWN);
         }
-        driver.findElement(By.id("departureOneway")).sendKeys(Keys.ENTER);
+        driver.findElement(oneWayDepartureCity).sendKeys(Keys.ENTER);
         log.info("Departure City set");
 
         homePage.setArrivalCity(arrivalCity);
         Thread.sleep(1000);
-        driver.findElement(By.id("arrivalOneway")).sendKeys(Keys.ENTER);
+        driver.findElement(oneWayArrivalCity).sendKeys(Keys.ENTER);
         log.info("Arrival City set");
 
         homePage.setMonth(lookingMonth);
@@ -86,7 +97,7 @@ public class US01_FlightSearch extends Base {
 
         SearchingFlightResultPage searchingFlightResultPage = new SearchingFlightResultPage(driver);
         Thread.sleep(3000);
-        softAssert.assertEquals(searchingFlightResultPage.getTitle(), "Warszawa (PL) → Kraków (PL) - Wyniki wyszukiwania", "Title mismatch");
+        softAssert.assertEquals(getTitleOfThePage(), searchingFlightResultPage.searchResultPageTitle, "Title mismatch");
         softAssert.assertTrue(searchingFlightResultPage.isOffersListDisplayed(),  "Offers list is not displayed");
         try {
             softAssert.assertAll();

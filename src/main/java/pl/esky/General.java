@@ -4,14 +4,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,59 +19,63 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Properties;
 
-public class Base {
+public class General {
 
     public WebDriver driver;
+
     public Properties prop;
     public static String browser;
     String browserName;
     Date date = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    private static Logger log = LogManager.getLogger(Base.class);
+    private static final Logger LOG = LogManager.getLogger(General.class);
 
     public String getBrowserName() throws IOException {
         prop = new Properties();
         FileInputStream fis = new FileInputStream("src/main/resources/data.properties");
         prop.load(fis);
-        browserName = prop.getProperty("browser");
+        browserName = prop.getProperty("browser").toLowerCase();
         return browserName;
     }
 
     public WebDriver initializeDriver() throws IOException {
 
      switch(getBrowserName()) {
-         case "Chrome":
+         case "chrome":
              WebDriverManager.chromedriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new ChromeDriver();
              browser = "Chrome";
              break;
-         case "FireFox":
+         case "firefox":
              WebDriverManager.firefoxdriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new FirefoxDriver();
              browser = "FireFox";
              break;
-         case "Safari":
+         case "safari":
+//             WebDriverManager.safaridriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new SafariDriver();
              browser = "Safari";
              break;
-//         case "Opera":
+//         case "opera":
 //             System.setProperty("webdriver.opera.driver", "src/main/java/pl/esky/pages/Resources/Drivers/operadriver");
 //             driver = new OperaDriver();
 //             break;
-         case "Edge":
+         case "edge":
              WebDriverManager.edgedriver().setup();
              System.setProperty("webdriver.http.factory", "jdk-http-client");
              driver = new EdgeDriver();
              browser = "Edge";
              break;
          default:
-             System.out.println("please check 'browser' property");
+             LOG.error("Invalid browser name: " + getBrowserName());
+             throw new IllegalStateException("Invalid browser name: " + getBrowserName());
      }
         return driver;
     }
@@ -95,16 +98,27 @@ public class Base {
             return responseCode != 200;
         } catch (MalformedURLException e) {
             if (e.getMessage().equals("unknown protocol: javascript")) {
-                log.warn("The link with text " + link.getText() + " throw Exception " + e.getMessage());
+                LOG.warn("The link with text " + link.getText() + " throw Exception " + e.getMessage());
                 return false;
             } else {
-                log.error("The link with text " + link.getText() + " throw Exception " + e.getMessage());
+                LOG.error("The link with text " + link.getText() + " throw Exception " + e.getMessage());
                 return true;
             }
         } catch (IOException e) {
             System.out.println("The link with text " + link.getText() + " throw Exception " + e.getMessage());
-            log.error("The link with text " + link.getText() + " throw Exception " + e.getMessage());
+            LOG.error("The link with text " + link.getText() + " throw Exception " + e.getMessage());
             return true;
         }
     }
+
+    public void waitForElement (WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated((By) webElement));
+    }
+
+    public String getTitleOfThePage() {
+        String pageTitle = driver.getTitle();
+        return pageTitle;
+    }
+
 }

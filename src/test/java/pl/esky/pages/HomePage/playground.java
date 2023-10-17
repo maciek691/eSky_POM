@@ -10,7 +10,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import pl.esky.Base;
+import pl.esky.General;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +18,9 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.*;
 
-public class  playground extends Base {
+public class  playground extends General {
 
-    private static Logger log = LogManager.getLogger(TC01_linksSection.class);
+    private static final Logger log = LogManager.getLogger(TC01_linksSection.class);
     WebDriver driver;
 
     String xpathToLinksInLinksSection = "//div[contains(@class,'col')]/ul/li/a";
@@ -93,7 +93,7 @@ public class  playground extends Base {
          **/
         String[] stringNumbers = Arrays.stream(numbers).mapToObj(s->"number: "+s).toArray(String[]::new);
         System.out.println(stringNumbers[0]+", "+stringNumbers[1]+", "+stringNumbers[2]+", "+stringNumbers[3]+", "+stringNumbers[4]+", "+stringNumbers[5]+", "+stringNumbers[6]+", "+stringNumbers[7]+", "+stringNumbers[8]+", "+stringNumbers[9]);
-        List<String> listNumbers = new ArrayList<>(Arrays.asList(Arrays.toString(numbers)));
+        List<String> listNumbers = new ArrayList<>(List.of(Arrays.toString(numbers)));
         System.out.println(listNumbers.size());
         boolean is32 = listNumbers.stream().anyMatch(s->s.contains("32"));
         System.out.println(is32);

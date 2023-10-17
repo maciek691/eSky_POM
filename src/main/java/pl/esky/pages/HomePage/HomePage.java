@@ -5,31 +5,37 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.esky.Base.browser;
-import static pl.esky.Base.isLinkBroken;
+import static pl.esky.General.browser;
+import static pl.esky.General.isLinkBroken;
 
 
 public class HomePage {
 
-    private static final Logger log = LogManager.getLogger(HomePage.class);
+
+    // Constructor
+    private WebDriver driver;
+    public HomePage(final WebDriver driver) throws IOException {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
     // Variables
-    private final WebDriver driver;
+    private static final Logger LOG = LogManager.getLogger(HomePage.class);
+
+//    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
     // Locators
     @FindBy(id = "usercentrics-root")
     WebElement domShadow;
-    @FindBy(css = "button[data-testid='uc-accept-all-button']")
-    WebElement acceptCookiesButton;
     @FindBy(id = "TripTypeOneway")
     WebElement tripOneWayRadiobutton;
     @FindBy(id = "serviceClass")
@@ -62,28 +68,29 @@ public class HomePage {
     WebElement submitNewsletter;
     @FindBy(css = "em[class='error-msg']")
     WebElement newsletterErrorMessage;
+    @FindBy(css = "td[data-handler='selectDay']")
+    List <WebElement> calendar;
 
+    public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
+    public By acceptCookiesButton = By.cssSelector("button[data-testid='uc-accept-all-button']");
 
-    // Constructor
-    public HomePage(final WebDriver driver) throws IOException {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
 
     // Actions
 
     public void acceptCookies() throws IOException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         if (browser == "Chrome" || browser == "Edge") {
             WebElement shadowHost = domShadow;
             SearchContext shadowRoot = shadowHost.getShadowRoot();
-            shadowRoot.findElement(By.cssSelector("button[data-testid='uc-accept-all-button']")).click();
+            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
+            shadowRoot.findElement(acceptCookiesButton).click();
         } else {
             WebElement shadowHost = domShadow;
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            List<?> elements = (List<?>) js.executeScript(
-                    "return arguments[0].shadowRoot.children", shadowHost);
+            List<?> elements = (List<?>) js.executeScript("return arguments[0].shadowRoot.children", shadowHost);
             WebElement shadowRoot = (WebElement) elements.get(0);
-            shadowRoot.findElement(By.cssSelector("button[data-testid='uc-accept-all-button']")).click();
+            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
+            shadowRoot.findElement(acceptCookiesButton).click();
         }
     }
 
@@ -96,6 +103,21 @@ public class HomePage {
         journey.selectByValue(journeyClass);
     }
 
+//    public void setDepartureIfOneWay(String departureCity) throws InterruptedException {
+//        Actions a = new Actions(driver);
+//        a.sendKeys(departureIfOneWay, departureCity).build().perform();
+//        Thread.sleep(3000);
+////        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("autocomplete-holder")));
+//        driver.findElement(By.cssSelector("a[data-city-code='waw']")).click();
+//    }
+//
+//    public void setArrivalCity(String arrivalCity) throws InterruptedException {
+//        Actions a = new Actions(driver);
+//        a.sendKeys(arrivalIfOneWay, arrivalCity).build().perform();
+//        Thread.sleep(3000);
+////        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("autocomplete-holder")));
+//        driver.findElement(By.cssSelector("a[data-city-code='KRK']")).click();
+//    }
     public void setDepartureIfOneWay(String departureCity) {
         departureIfOneWay.sendKeys(departureCity);
     }
@@ -112,19 +134,8 @@ public class HomePage {
     }
 
     public void setDay(String lookingDay) {
-        List<WebElement> days = driver.findElements(By.cssSelector("td[data-handler='selectDay']"));
-            days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
-
-
-//        int numberOfDays = driver.findElements(By.cssSelector("td[data-handler='selectDay']")).size();
-//
-//        for (int i = 0; i < numberOfDays; i++) {
-//            String day = driver.findElements(By.className("ui-state-default")).get(i).getText();
-//            if (day.equalsIgnoreCase(lookingDay)) {
-//                driver.findElements(By.className("ui-state-default")).get(i).click();
-//                break;
-//            }
-//        }
+        List<WebElement> days = calendar;
+        days.stream().filter(day -> day.getText().equalsIgnoreCase(lookingDay)).findFirst().get().click();
     }
 
     public void setAdultPassengers(String numberOfAdultPassengers) {
@@ -143,49 +154,15 @@ public class HomePage {
         searchButton.click();
     }
 
-//    public void checkLinksInLinksSection(String xpathListLokator) throws IOException {
-//        SoftAssert softAssert = new SoftAssert();
-//
-//        List<WebElement> links = driver.findElements(By.xpath(xpathListLokator));
-//        String prywatnoscLink = "Prywatność"; // as only this link use js.
-//
-//        for (WebElement link : links) {
-//            try {
-//                String url = link.getAttribute("href");
-//                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-//                connection.setRequestMethod("HEAD");
-//                connection.connect();
-//                int respondCode = connection.getResponseCode();
-//
-//                if (respondCode < 400) {
-//                    log.info("the link " + link.getText() + " is ok");
-//                } else {
-//                    log.error("the link " + link.getText() + " is broke with code " + respondCode);
-//                }
-//
-//                softAssert.assertTrue(respondCode < 400, "The link with text " + link.getText() + " is broke with code "
-//                        + respondCode);
-//
-//            } catch (MalformedURLException e) {
-//                Assert.assertEquals(prywatnoscLink, link.getText());
-//                log.warn("The link with text " + link.getText() + " throw Exception " + e.getMessage());
-//                    System.out.println("The link with text " + link.getText() + " throw Exception " + e.getMessage());
-//            }
-//        }
-//        softAssert.assertAll();
-//    }
-
-    public void checkLinksInLinksSection (String xpathListLokator) {
+    public void checkLinksInLinksSection(By xpathListLokator) {
         // Create list of the links
-        List<WebElement> links = driver.findElements(By.xpath(xpathListLokator));
+        List<WebElement> links = driver.findElements(xpathListLokator);
         //check if the links are not broken
-        List<WebElement> brokenLinks = links.stream()
-                .filter(link -> isLinkBroken(link))
-                .collect(Collectors.toList());
+        List<WebElement> brokenLinks = links.stream().filter(link -> isLinkBroken(link)).collect(Collectors.toList());
         //log the broken links
-        log.warn("There are " + brokenLinks.size() + " broken links");
+        LOG.warn("There are " + brokenLinks.size() + " broken links");
         for (WebElement brokenLink : brokenLinks) {
-            log.error("the link " + brokenLink.getText() + " is broke");
+            LOG.error("the link " + brokenLink.getText() + " is broke");
         }
         Assert.assertTrue(brokenLinks.isEmpty(), "There are " + brokenLinks.size() + " broken links");
     }
