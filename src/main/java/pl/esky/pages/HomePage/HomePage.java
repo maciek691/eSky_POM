@@ -5,26 +5,24 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import pl.esky.General;
+import pl.esky.pages.SearchingFlightResultPage.SearchingFlightResultPage;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.esky.General.browser;
-import static pl.esky.General.isLinkBroken;
 
 
-public class HomePage {
+public class HomePage extends General {
 
 
     // Constructor
     private WebDriver driver;
     public HomePage(final WebDriver driver) throws IOException {
+        super(driver);
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
@@ -34,8 +32,6 @@ public class HomePage {
 //    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
     // Locators
-    @FindBy(id = "usercentrics-root")
-    WebElement domShadow;
     @FindBy(id = "TripTypeOneway")
     WebElement tripOneWayRadiobutton;
     @FindBy(id = "serviceClass")
@@ -72,27 +68,11 @@ public class HomePage {
     List <WebElement> calendar;
 
     public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
-    public By acceptCookiesButton = By.cssSelector("button[data-testid='uc-accept-all-button']");
+
 
 
     // Actions
 
-    public void acceptCookies() throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        if (browser == "Chrome" || browser == "Edge") {
-            WebElement shadowHost = domShadow;
-            SearchContext shadowRoot = shadowHost.getShadowRoot();
-            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
-            shadowRoot.findElement(acceptCookiesButton).click();
-        } else {
-            WebElement shadowHost = domShadow;
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            List<?> elements = (List<?>) js.executeScript("return arguments[0].shadowRoot.children", shadowHost);
-            WebElement shadowRoot = (WebElement) elements.get(0);
-            WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
-            shadowRoot.findElement(acceptCookiesButton).click();
-        }
-    }
 
     public void setOneWayTrip() {
         tripOneWayRadiobutton.click();
@@ -150,8 +130,9 @@ public class HomePage {
         }
     }
 
-    public void search() {
+    public SearchingFlightResultPage search() {
         searchButton.click();
+        return new SearchingFlightResultPage(driver);
     }
 
     public void checkLinksInLinksSection(By xpathListLokator) {

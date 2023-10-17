@@ -1,12 +1,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="E-sky" parallel="tests">
+<suite name="E-sky">
     <listeners>
         <listener class-name="Listeners"/>
     </listeners>
     <test name="homepage">
         <classes>
-            <class name = "pl.esky.pages.HomePage.TC01_linksSection"/>
-            <class name = "pl.esky.pages.HomePage.TC02_newsletter"/>
+            <class name = "pl.esky.pages.HomePage.HomePageTests"/>
         </classes>
     </test>
 </suite>
