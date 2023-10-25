@@ -21,7 +21,7 @@ public class FileInput {
         ArrayList<String> data = new ArrayList<String>();
 
         // create an object XSSCWorkbook class
-        FileInputStream file = new FileInputStream("src/main/resources/emails.xlsx");
+        FileInputStream file = new FileInputStream("src/test/java/pl/esky/pages/testData/emails.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(file);
 
         // get the right tab

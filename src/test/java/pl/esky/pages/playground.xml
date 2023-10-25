@@ -1,19 +1,19 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="E-sky" parallel="tests">
     <listeners>
-        <listener class-name="Listeners"/>
+        <listener class-name="pl.esky.pages.TestComponents.Listeners"/>
     </listeners>
-    <test name="homepage">
+    <test name="homepage" thread-count="5">
         <parameter name="parameter1" value="parameter1 works! "></parameter>
         <parameter name="parameter2" value="parameter2 works! "></parameter>
         <parameter name="parameter3" value="parameter3 works! "></parameter>
         <groups>
             <run>
-                <include name="includeGroup"/>
+                <!--                <include name="includeGroup"/>-->
             </run>
         </groups>
         <classes>
-            <class name = "pl.esky.pages.HomePage.playground"/>
+            <class name="pl.esky.pages.HomePage.playground"/>
         </classes>
     </test>
 </suite>

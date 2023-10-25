@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
@@ -18,43 +17,35 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class HomePageTests extends BaseTest {
-    WebDriver driver;
-    private static final Logger LOG = LogManager.getLogger(HomePageTests.class);
-    //    By id = By.id("usercentrics-root");
-    @BeforeMethod(groups = {"E2E"})
-    public void setup() throws IOException {
-        driver = initializeDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        LOG.info("browser: " + browser);
-    }
+public class us01_SearchFlight extends BaseTest {
 
-    @AfterMethod(groups = {"E2E"})
-    public void end() {
-        driver.quit();
-    }
+    private static final Logger LOG = LogManager.getLogger(us01_SearchFlight.class);
 
-    @Test(groups = {"E2E"})
+
+    SoftAssert softAssert = new SoftAssert();
+
+    //testing data
+    String journeyClass = "business";
+    String departureCity = "Warszawa";
+    String arrivalCity = "Kraków";
+    String lookingMonth = "Luty";
+    String lookingDay = "10";
+    String numberOfAdultPassengers = "2";
+    String numberOfChildPassengers = "2";
+    By oneWayArrivalCity = By.id("arrivalOneway");
+    By oneWayDepartureCity = By.id("departureOneway");
+    By domShadow = By.id("usercentrics-root");
+
+
+    @Test(groups = {"E2E"}, retryAnalyzer = pl.esky.pages.TestComponents.Retry.class, priority = 1)
     public void us01_SearchFlight() throws InterruptedException, IOException {
 
         /* As a Client
         I want to find a flight for me and my family
         from Warsaw Chopin Airport to Cracow Balice Airport  */
 
-        SoftAssert softAssert = new SoftAssert();
-
-        //testing data
-        String journeyClass = "business";
-        String departureCity = "Warszawa";
-        String arrivalCity = "Kraków";
-        String lookingMonth = "Luty";
-        String lookingDay = "10";
-        String numberOfAdultPassengers = "2";
-        String numberOfChildPassengers = "2";
-        By oneWayArrivalCity = By.id("arrivalOneway");
-        By oneWayDepartureCity = By.id("departureOneway");
-        By domShadow = By.id("usercentrics-root");
-
+        driver = initializeDriver();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get(prop.getProperty("MainUrl"));
 
         HomePage homePage = new HomePage(driver);
@@ -109,37 +100,5 @@ public class HomePageTests extends BaseTest {
         LOG.info("Landing Page ok");
     }
 
-    @Test
-    public void tc01_CheckLinksInSectionLinks() throws IOException, InterruptedException {
-        HomePage homePage = new HomePage(driver);
-        driver.get(prop.getProperty("MainUrl"));
-        acceptCookies(By.id("usercentrics-root"));
-        homePage.checkLinksInLinksSection(homePage.xpathToLinksInLinksSection);
-    }
 
-    @Test
-    public void tc02_CheckNewsletterWithIncorrectEmail(Method method) throws IOException {
-
-        FileInput d = new FileInput();
-        ArrayList<String> incorrectEmailsList = d.getData("IncorrectEmails");
-        LOG.info("Array list created from the file");
-
-        HomePage homePage = new HomePage(driver);
-        driver.get(prop.getProperty("MainUrl"));
-        acceptCookies(By.id("usercentrics-root"));
-        for (int i=1; i<incorrectEmailsList.size(); i++) {
-            homePage.emailNewsletter.clear();
-            homePage.emailNewsletter.sendKeys(incorrectEmailsList.get(i));
-            homePage.signUpForNewsletter();
-            //INFO: to catch error message in case if sth go wrong other than error message.
-            try {
-                Assert.assertEquals(homePage.newsletterErrorMessage.getText(), "Wpisz poprawny e-mail", "Error message is not appearing");
-            } catch (Exception e) {
-                LOG.error("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
-                getScreenShotPath(method.getName(), driver);
-                Assert.fail("there is error for test data: "+ incorrectEmailsList.get(i) + " -> " + e.getMessage());
-            }
-            LOG.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
-        }
-    }
 }

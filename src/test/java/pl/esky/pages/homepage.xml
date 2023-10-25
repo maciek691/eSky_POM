@@ -1,11 +1,22 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="E-sky">
     <listeners>
-        <listener class-name="Listeners"/>
+        <listener class-name="pl.esky.pages.TestComponents.Listeners"/>
     </listeners>
-    <test name="homepage">
+    <test name="Search flight" thread-count="5">
         <classes>
-            <class name = "pl.esky.pages.HomePage.HomePageTests"/>
+            <class name = "pl.esky.pages.HomePage.us01_SearchFlight"/>
+        </classes>
+    </test>
+    <test name="Check links in links section" thread-count="5">
+        <classes>
+            <class name = "pl.esky.pages.HomePage.tc01_CheckLinksInSectionLinks"/>
+
+        </classes>
+    </test>
+    <test name="check newsletter subscription" thread-count="5">
+        <classes>
+            <class name = "pl.esky.pages.HomePage.tc02_CheckNewsletterWithIncorrectEmail"/>
         </classes>
     </test>
 </suite>

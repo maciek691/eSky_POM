@@ -20,7 +20,7 @@ public class HomePage extends General {
 
 
     // Constructor
-    private WebDriver driver;
+    private final WebDriver driver;
     public HomePage(final WebDriver driver) throws IOException {
         super(driver);
         this.driver = driver;
@@ -69,10 +69,7 @@ public class HomePage extends General {
 
     public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
 
-
-
     // Actions
-
 
     public void setOneWayTrip() {
         tripOneWayRadiobutton.click();
