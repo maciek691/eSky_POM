@@ -66,7 +66,4 @@ public class General {
         String pageTitle = driver.getTitle();
         return pageTitle;
     }
-
-
-
-}
+ }

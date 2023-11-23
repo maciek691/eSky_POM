@@ -42,6 +42,9 @@
                 </pluginManagement>
             </build>
     </profile>
+    <profile>
+        <id>CucumberTests</id>
+    </profile>
 </profiles>
 
 <build>
@@ -52,6 +55,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
+                    <includes>
+                        <include>**/TestNGTestRunner.java</include>
+                    </includes>
                     <suiteXmlFiles>
                     </suiteXmlFiles>
                 </configuration>
@@ -133,6 +139,16 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-testng</artifactId>
+            <version>7.14.0</version>
         </dependency>
     </dependencies>
     <properties>

@@ -44,5 +44,6 @@ public class tc02_CheckNewsletterWithIncorrectEmail extends BaseTest {
             }
             LOG.info("for incorrect address e-mail: " + incorrectEmailsList.get(i) + " error message is: " + homePage.newsletterErrorMessage.getText());
         }
+
     }
 }

@@ -98,6 +98,7 @@ public class us01_SearchFlight extends BaseTest {
             softAssert.assertAll();
         }
         LOG.info("Landing Page ok");
+
     }
 
 

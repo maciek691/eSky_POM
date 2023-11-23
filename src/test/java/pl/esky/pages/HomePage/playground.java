@@ -5,9 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
+import org.testng.Assert;
 import org.testng.annotations.*;
+import pl.esky.General;
 import pl.esky.pages.TestComponents.BaseTest;
 
 import java.io.File;
@@ -69,7 +73,7 @@ public class playground extends BaseTest {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get(prop.getProperty("MainUrl"));
         HomePage hp = new HomePage(driver);
-//        acceptCookies(By.id("usercentrics-root"));
+        acceptCookies(By.id("usercentrics-root"));
         //otwarcie nowej zakładki
         driver.switchTo().newWindow(WindowType.TAB);
         //utworzenie listy zakładek otwartych
