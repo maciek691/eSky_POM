@@ -6,8 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
 
@@ -35,20 +39,34 @@ public class BaseTest {
     WebElement domShadow;
     String browserName;
     Date date = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+
     public String getBrowserName() throws IOException {
         prop = new Properties();
         FileInputStream fis = new FileInputStream("src/main/resources/data.properties");
         prop.load(fis);
-        browserName = prop.getProperty("browser").toLowerCase();
+//        browserName = System.getProperty("browser").toLowerCase() != null ? System.getProperty("browser").toLowerCase() : prop.getProperty("browser").toLowerCase();
+        if (System.getProperty("browser") != null) {
+            browserName = System.getProperty("browser").toLowerCase();
+        } else {
+            browserName = prop.getProperty("browser").toLowerCase();
+        }
         return browserName;
     }
+
     public WebDriver initializeDriver() throws IOException {
         browser = getBrowserName();
-        switch(browser) {
+        switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
+                break;
+            case "chrome_headless":
+                ChromeOptions optionsChrome = new ChromeOptions();
+                WebDriverManager.chromedriver().setup();
+                optionsChrome.addArguments("headless");
+                driver = new ChromeDriver(optionsChrome);
+                driver.manage().window().setSize(new Dimension(1920, 1080));
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
@@ -61,11 +79,20 @@ public class BaseTest {
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
                 break;
+            case "edge_headless":
+                EdgeOptions optionsEdge = new EdgeOptions();
+                WebDriverManager.edgedriver().setup();
+                optionsEdge.addArguments("headless");
+                driver = new EdgeDriver(optionsEdge);
+                driver.manage().window().setSize(new Dimension(1920, 1080));
+                break;
             default:
                 LOG.error("Invalid browser name: " + getBrowserName());
                 throw new IllegalStateException("Invalid browser name: " + getBrowserName());
         }
         System.setProperty("webdriver.http.factory", "jdk-http-client");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().window().setSize(new Dimension(1920, 1080));
         LOG.info("driver for " + browser + " initialized");
         return driver;
     }
@@ -73,7 +100,7 @@ public class BaseTest {
     public String getScreenShotAndReturnPath(String testCaseName, WebDriver driver) throws IOException {
         TakesScreenshot ts = (TakesScreenshot) driver;
         File source = ts.getScreenshotAs(OutputType.FILE);
-        String destinationFile = "screenshots/" + testCaseName + " " + dateFormat.format(date) + ".png";
+        String destinationFile = "screenshots/" + testCaseName + "_" + dateFormat.format(date) + ".png";
         FileUtils.copyFile(source, new File(destinationFile));
         return destinationFile;
     }
@@ -82,7 +109,7 @@ public class BaseTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         browser = getBrowserName();
         WebElement shadowHost = driver.findElement(id);
-        if (Objects.equals(browser, "chrome") || Objects.equals(browser, "edge")) {
+        if (browser.contains("chrome") || browser.contains("edge")) {
             SearchContext shadowRoot = shadowHost.getShadowRoot();
             WebElement button = wait.until(ExpectedConditions.visibilityOf(shadowRoot.findElement(acceptCookiesButton)));
             shadowRoot.findElement(acceptCookiesButton).click();
@@ -98,7 +125,6 @@ public class BaseTest {
 
     @BeforeTest
     public void setup() throws IOException {
-
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
     }

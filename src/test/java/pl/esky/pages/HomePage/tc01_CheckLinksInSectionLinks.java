@@ -1,7 +1,5 @@
 package pl.esky.pages.HomePage;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import pl.esky.pages.TestComponents.BaseTest;
@@ -20,5 +18,6 @@ public class tc01_CheckLinksInSectionLinks extends BaseTest {
         HomePage homePage = new HomePage(driver);
         acceptCookies(domShadow);
         homePage.checkLinksInLinksSection(homePage.xpathToLinksInLinksSection);
+
     }
 }

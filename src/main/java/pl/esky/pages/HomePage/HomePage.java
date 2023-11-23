@@ -58,14 +58,21 @@ public class HomePage extends General {
     WebElement searchButton;
     @FindBy(xpath = "//div[contains(@class,'col')]/ul/li/a")
     WebElement linksInLinksSection;
+    @FindBy(id = "mewsletter")
+    public WebElement newsletterSection;
     @FindBy(id = "email")
-    WebElement emailNewsletter;
+    public WebElement emailNewsletter;
     @FindBy(id = "submit")
     WebElement submitNewsletter;
     @FindBy(css = "em[class='error-msg']")
     WebElement newsletterErrorMessage;
     @FindBy(css = "td[data-handler='selectDay']")
     List <WebElement> calendar;
+    @FindBy(css = "div[class='custom-input']")
+    public List<WebElement> checkbox;
+
+    @FindBy(css = "div[class*='h5']")
+    public WebElement successNewsletterMessageText;
 
     public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
 

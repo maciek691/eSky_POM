@@ -4,4 +4,5 @@ logs/*
 reports/*
 screenshots/*
 target
+src/test/.DS_Store
 
