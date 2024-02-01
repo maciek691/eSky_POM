@@ -68,10 +68,12 @@ public class HomePage extends General {
     WebElement newsletterErrorMessage;
     @FindBy(css = "td[data-handler='selectDay']")
     List <WebElement> calendar;
+
     @FindBy(css = "div[class='custom-input']")
     public List<WebElement> checkbox;
 
-    @FindBy(css = "div[class*='h5']")
+    @FindBy(xpath = "//*[text()='Otrzymujesz już newsletter']")
+//            "div[class*='h5']")
     public WebElement successNewsletterMessageText;
 
     public By xpathToLinksInLinksSection = By.xpath("//div[contains(@class,'col')]/ul/li/a");
@@ -155,5 +157,6 @@ public class HomePage extends General {
     public void signUpForNewsletter() {
         submitNewsletter.click();
     }
+
 
 }
