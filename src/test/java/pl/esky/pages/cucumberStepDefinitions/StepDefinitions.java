@@ -42,6 +42,7 @@ public class StepDefinitions extends BaseTest {
     }
     @Then("I should see a success message")
     public void i_should_see_a_success_message() throws InterruptedException {
-        Assert.assertEquals((homePage.successNewsletterMessageText).getText(), "Otrzymujesz już newsletter", "Message is not appearing");
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        Assert.assertEquals((homePage.successNewsletterMessageText).getAttribute("textContent"), "Otrzymujesz już newsletter", "Message is not appearing");
     }
 }
