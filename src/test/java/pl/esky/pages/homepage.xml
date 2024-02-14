@@ -19,4 +19,9 @@
             <class name = "pl.esky.pages.HomePage.tc02_CheckNewsletterWithIncorrectEmail"/>
         </classes>
     </test>
+    <test name=" Cucumber - newsletter" thread-count="2">
+        <classes>
+            <class name="cucumber.TestNGCucumberRunner"/>
+        </classes>
+    </test>
 </suite>

@@ -8,7 +8,9 @@ import io.cucumber.testng.CucumberOptions;
         glue = {"pl/esky/pages/cucumberStepDefinitions", "cucumber/hooks"},
 //        tags = "@newsletter",
         monochrome = true,
-        plugin = {"html:reports/cucumberReport.html"})
+        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
+//                "pretty", "html:reports/cucumberReport.html"
+        })
 
 public class TestNGCucumberRunner extends AbstractTestNGCucumberTests {
 

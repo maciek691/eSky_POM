@@ -5,4 +5,5 @@ reports/*
 screenshots/*
 target
 src/test/.DS_Store
-
+allure-report
+allure-results
