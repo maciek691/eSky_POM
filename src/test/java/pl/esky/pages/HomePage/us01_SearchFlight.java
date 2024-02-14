@@ -28,7 +28,7 @@ public class us01_SearchFlight extends BaseTest {
     String journeyClass = "business";
     String departureCity = "Warszawa";
     String arrivalCity = "Kraków";
-    String lookingMonth = "Luty";
+    String lookingMonth = "Listopad";
     String lookingDay = "10";
     String numberOfAdultPassengers = "2";
     String numberOfChildPassengers = "2";
